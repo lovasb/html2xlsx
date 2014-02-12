@@ -1,25 +1,33 @@
 import six
+from lxml import html
 from io import BytesIO
 from StringIO import StringIO
-from lxml import etree
+from html2xlsx import Table, Sheet, Row, Cell
 
 
-class HTMLTableParser(object):
+class InputParser(object):
     def __init__(self, raw):
         self._input = raw
         if isinstance(raw, six.string_types):
-            self._root = etree.fromstring(raw)
+            self._root = html.fromstring(raw)
         elif isinstance(raw, (BytesIO, StringIO)):
-            self._root = etree.parse(raw)
+            self._root = html.parse(raw)
         else:
             raise NotImplementedError
 
-    def generate_table(self, html):
-        print self._root
-
-
-
-if __name__ == '__main__':
-    html = "<table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>"
-    pars = HTMLTableParser(html)
-    pars.generate_table(html)
+    def parse(self):
+        sheets = []
+        i = 1
+        for table in self._root.xpath("//table[@class='sheet']"):
+            name = unicode(table.attrib.get('data-name', 'Sheet%d' % i))
+            sheet = Sheet(name)
+            trs = table.xpath(".//tbody/tr") if len(table.xpath(".//tbody/tr")) else table.xpath(".//tr")
+            for tr in trs:
+                row = sheet.add_row(data=[])
+                for td in tr.xpath(".//td"):
+                    c = Cell(content=td.text, content_data_type=td.attrib.get('data-type', None))
+                    row.add_cell(cell=c)
+            sheets.append(sheet)
+            i += 1
+        table = Table(sheets=sheets)
+        return table
