@@ -54,3 +54,30 @@ class DataParsingTest(TestCase):
         parser = InputParser(html)
         table = parser.parse()
         table.to_workbook('/tmp/proba.xlsx')
+
+    def test_header(self):
+        html = """
+                <table class='sheet' data-name='First sheet'>
+                    <thead>
+                        <tr>
+                            <th>First column</th>
+                            <th>Second column</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td data-type='number'>2</td>
+                        </tr>
+                        <tr>
+                            <td data-type='number'>3</td>
+                            <td data-type='date'>2013-12-31</td>
+                        </tr>
+                    </tbody>
+                </table>"""
+        parser = InputParser(html)
+        table = parser.parse()
+        sheet = table.sheets[0]
+        self.assertEqual(len(sheet.rows), 3)
+        self.assertEqual(sheet.rows[0].is_header, True)
+        table.to_workbook('/tmp/header.xlsx')

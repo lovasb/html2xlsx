@@ -14,7 +14,6 @@ class Table(object):
                     y = row.cells.index(cell)
                     formt = wb.add_format(cell.format)
                     ws.write(x, y, cell.value, formt)
-        print len(wb.formats)
         wb.close()
 
 

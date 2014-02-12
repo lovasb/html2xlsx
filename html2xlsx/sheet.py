@@ -6,8 +6,8 @@ class Sheet(object):
         self._name = name
         self._rows = []
 
-    def add_row(self, data=[]):
-        row = Row(data=data)
+    def add_row(self, data=[], is_header=False):
+        row = Row(data=data, is_header=is_header)
         self._rows.append(row)
         return row
 

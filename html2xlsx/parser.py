@@ -21,6 +21,12 @@ class InputParser(object):
         for table in self._root.xpath("//table[@class='sheet']"):
             name = unicode(table.attrib.get('data-name', 'Sheet%d' % i))
             sheet = Sheet(name)
+            head = table.xpath(".//thead/tr/th")
+            if len(head):
+                row = sheet.add_row(data=[], is_header=True)
+                for th in head:
+                    c = Cell(content=th.text)
+                    row.add_cell(cell=c)
             trs = table.xpath(".//tbody/tr") if len(table.xpath(".//tbody/tr")) else table.xpath(".//tr")
             for tr in trs:
                 row = sheet.add_row(data=[])
@@ -31,3 +37,25 @@ class InputParser(object):
             i += 1
         table = Table(sheets=sheets)
         return table
+
+
+"""
+from weasyprint import HTML
+from weasyprint.css import get_all_computed_styles
+
+document = HTML(string='''
+    <style>
+    html { font-size: 10px; line-height: 140% }
+    section { font-size: 10px; line-height: 1.4 }
+    div, p { font-size: 20px; vertical-align: 50% }
+    </style>
+    <body><div><section><p></p></section></div></body>
+    ''')
+
+style_for = get_all_computed_styles(document)
+div = document.root_element.xpath('.//div')
+style = style_for(d)
+style.font_size
+
+sudo apt-get install libffi-dev
+"""
