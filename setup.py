@@ -6,10 +6,7 @@ from fnmatch import fnmatchcase
 from setuptools import setup, find_packages
 from html2xlsx import __version__ as version
 
-install_requires = [
-    "lxml",
-    "xlsxwriter"
-]
+install_requires = ["lxml", "xlsxwriter", "weasyprint", "webcolors"]
 
 standard_exclude = ('*.py', '*.pyc', '*$py.class', '*~', '.*', '*.bak')
 standard_exclude_directories = ('.*', 'CVS', '_darcs', './build', 'project_template',
