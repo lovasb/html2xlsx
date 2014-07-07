@@ -37,7 +37,7 @@ class Cell(object):
         return int(self._colspan)
 
     def get_formatting_style(self, book):
-        format_dict = {}
+        format_dict = self.format
         if self._style:
             c = self._style['background_color']
             if c.alpha == 1.0:
