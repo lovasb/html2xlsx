@@ -2,7 +2,10 @@ import six
 from weasyprint import HTML
 from io import BytesIO
 from StringIO import StringIO
-from html2xlsx import Table, Sheet, Row, Cell
+from .table import Table
+from .sheet import Sheet
+from .row import Row
+from .cell import Cell
 from weasyprint.css import get_all_computed_styles
 
 
