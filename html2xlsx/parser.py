@@ -39,7 +39,7 @@ class InputParser(object):
                 row = sheet.add_row(data=[], style=self._style_for(tr))
                 for td in tr.xpath(".//td"):
                     c = Cell(content=td.text, content_data_type=td.attrib.get('data-type', None), 
-                             style=self._style_for(td), colspan=td.attrib.get('colspan') or 0)
+                             style=self._style_for(td), colspan=td.attrib.get('colspan') or 0, num_format=td.attrib.get('data-num-format', None))
                     row.add_cell(cell=c)
             sheets.append(sheet)
             i += 1

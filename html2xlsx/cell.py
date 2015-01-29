@@ -3,11 +3,12 @@ from dateutil.parser import parse
 from xlsxwriter.format import Format
 
 class Cell(object):
-    def __init__(self, content, colspan=0, content_data_type=None, style=None):
+    def __init__(self, content, colspan=0, content_data_type=None, style=None, num_format=None):
         self._content = unicode(content)
         self._type = content_data_type
         self._style = style
         self._colspan = colspan
+        self._num_format = num_format
 
     @property
     def value(self):
@@ -38,6 +39,9 @@ class Cell(object):
 
     def get_formatting_style(self, book):
         format_dict = self.format
+        if self._num_format:
+            format_dict['num_format'] = self._num_format
+
         if self._style:
             c = self._style['background_color']
             if c.alpha == 1.0:
